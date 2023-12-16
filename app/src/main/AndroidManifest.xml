@@ -18,6 +18,27 @@
             android:label="@string/title_activity_register"
             android:theme="@style/Theme.YemekAI" />
         <activity
+            android:name=".login"
+            android:exported="false"
+            android:label="login"
+            android:theme="@style/Theme.YemekAI" />
+        <activity
+            android:name=".storage"
+            android:exported="false"
+            android:label="storage"
+            android:theme="@style/Theme.YemekAI" />
+        <activity
+            android:name=".searchResult"
+            android:exported="false"
+            android:label="searchResult"
+            android:theme="@style/Theme.YemekAI" />
+        <activity
+            android:name=".favFood"
+            android:exported="false"
+            android:label="Favorite Food"
+            android:theme="@style/Theme.YemekAI" />
+
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
