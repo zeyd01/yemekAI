@@ -20,7 +20,7 @@ import java.util.List;
 
 public class register extends AppCompatActivity {
 
-    EditText name,email1,password1,age;
+    EditText name1,email1,password1,age;
     CheckBox rule1;
     Button register;
     private List<Account> accounts;
@@ -28,13 +28,14 @@ public class register extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
-        name=findViewById(R.id.editTextText);
+        name1=findViewById(R.id.editTextText);
         email1=findViewById(R.id.editTextTextEmailAddress);
         password1=findViewById(R.id.editTextTextPassword);
         age=findViewById(R.id.editTextNumber);
         rule1=findViewById(R.id.checkBox);
         register=findViewById(R.id.button);
         accounts = new ArrayList<>();
+        accounts.add(new Account("admin","admin@gmail.com","admin"));
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,8 +55,8 @@ public class register extends AppCompatActivity {
 
 public boolean checkDataEntered(){
 
-   if (isEmpty(name)) {
-        name.setError("Name is required");
+   if (isEmpty(name1)) {
+        name1.setError("Name is required");
         return false;
     }
     if (isEmail(email1)==false) {
@@ -88,28 +89,18 @@ void createButton(){
         }
 
     }
-    private class Account {
-        private String username;
-        private String password;
-        private String email;
 
-        public Account(String username, String password, String email) {
-            this.username = username;
-            this.password = password;
-            this.email = email;
-        }
-    }
 
-    private void createAccount() {
-        String username = name.getText().toString();
+    public void createAccount() {
+        String name = name1.getText().toString();
         String password = password1.getText().toString();
         String email = email1.getText().toString();
 
-        if (username.isEmpty() || password.isEmpty() || email.isEmpty()) {
+        if (name.isEmpty() || password.isEmpty() || email.isEmpty()) {
 
             return;
         }
-        Account account = new Account(username, password, email);
+        Account account = new Account(name, email, password);
         accounts.add(account);
 
     }
