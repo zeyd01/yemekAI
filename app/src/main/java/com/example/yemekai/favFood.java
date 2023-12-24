@@ -1,4 +1,14 @@
 package com.example.yemekai;
 
-public class favFood {
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+
+public class favFood extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fav_food);
+    }
 }
