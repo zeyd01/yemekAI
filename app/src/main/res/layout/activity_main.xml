@@ -46,5 +46,16 @@
         android:layout_marginTop="260dp"
         android:text="FavoriteFood" />
 
+    <EditText
+        android:id="@+id/editTextText3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="320dp"
+        android:hint="Search"
+        />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
