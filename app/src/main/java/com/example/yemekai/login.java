@@ -2,6 +2,7 @@ package com.example.yemekai;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,12 +17,15 @@ import java.util.List;
 
 public class login extends AppCompatActivity {
 
-    TextView tw1;
+
     EditText e1,e2;
     Button b1;
     private List<Account> accounts;
 
-
+    private List<Account> getStoredAccounts() {
+        register registerInstance = new register();
+        return registerInstance.getStoredAccounts(this); // 'this' refers to the current activity context
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +34,10 @@ public class login extends AppCompatActivity {
         e1=findViewById(R.id.editTextTextEmailAddress3);
         e2=findViewById(R.id.editTextTextPassword3);
         b1=findViewById(R.id.button8);
-        tw1=findViewById(R.id.textView2);
         accounts = new ArrayList<>();
         accounts.add(new Account("admin","admin@gmail.com","admin"));
+        accounts = getStoredAccounts();
+        Log.d("LoginActivity", "Accounts retrieved: " + Arrays.toString(accounts.toArray()));
 
         b1.setOnClickListener(v -> {
             String enteredEmail = e1.getText().toString();

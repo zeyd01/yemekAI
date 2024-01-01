@@ -29,7 +29,7 @@ public class chatapi extends AsyncTask<Void, Void, String> {
         try {
             return makeApiRequest(API_URL, API_KEY, items, editTextContent);
         } catch (IOException e) {
-            Log.e("ChatGPTApiTask", "Error making API request: " + e.getMessage());
+            Log.e("chatapi", "Error making API request: " + e.getMessage());
             return null;
         }
     }
