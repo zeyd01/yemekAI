@@ -1,19 +1,30 @@
 package com.example.yemekai;
 
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class chatapi extends AsyncTask<Void, Void, String> {
-    private static final String API_KEY = "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";
+    private static final String API_KEY = "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";
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
-
+    private boolean isApiRequestMade = false;
     private List<ItemL> items;
     private String editTextContent; // Add this variable to store EditText content
     private OnApiResultListener listener;
@@ -26,12 +37,22 @@ public class chatapi extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... voids) {
+        if (isApiRequestMade) {
+
+            return null;
+        }
+
         try {
+            isApiRequestMade = true;
             return makeApiRequest(API_URL, API_KEY, items, editTextContent);
         } catch (IOException e) {
             Log.e("chatapi", "Error making API request: " + e.getMessage());
             return null;
         }
+    }
+
+    public interface OnApiResultListener {
+        void onApiResult(String result);
     }
 
     @Override
@@ -55,9 +76,10 @@ public class chatapi extends AsyncTask<Void, Void, String> {
             connection.setDoOutput(true);
 
             // Create JSON request data
-            String requestData = "{\"messages\": [" +
-                    "{\"role\": \"system\", \"content\": \"You are a helpful assistant.\"}," +
-                    "{\"role\": \"user\", \"content\": \"Recommend recipes with " + stringifyItems(items) + ". " + editTextContent + ".\"}" +
+            String requestData = "{\"model\": \"gpt-3.5-turbo\", " +
+                    "\"messages\": [" +
+                    "{\"role\": \"system\", \"content\": \"\"}," +
+                    "{\"role\": \"user\", \"content\": \"Benim " + stringifyItems(items) + "var. " + editTextContent + "yemekler öner.Bu yemeklerin adını ve kısa bir özetini teker teker liste şeklinde istiyorum\"}" +
                     "]}";
 
             // Send the request
@@ -99,7 +121,4 @@ public class chatapi extends AsyncTask<Void, Void, String> {
         return stringBuilder.toString();
     }
 
-    public interface OnApiResultListener {
-        void onApiResult(String result);
-    }
 }

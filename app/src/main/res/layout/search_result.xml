@@ -4,17 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".searchResult">
-
-    <!-- Other UI elements as needed -->
-
-
-    <TextView
-        android:id="@+id/recipeTextView"
+    <androidx.recyclerview.widget.RecyclerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <LinearLayout
+        android:id="@+id/recipeContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textColor="@android:color/black"
-        android:autoLink="web"
-        android:text="Recipe results will appear here." />
+        android:orientation="vertical"
+        android:layout_marginTop="16dp">
+        <!-- This LinearLayout will hold dynamically created TextViews -->
+    </LinearLayout>
 
 </RelativeLayout>

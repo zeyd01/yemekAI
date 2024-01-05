@@ -55,13 +55,27 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
-    private void performSearch() {
-        // Get the search query from the EditText
-        String searchQuery = searchEditText.getText().toString();
+    private boolean searchInitiated = false; // Add this flag as a class variable
 
-        // Start the searchResult activity and pass the search query as an extra
-        Intent intent = new Intent(this, searchResult.class);
-        intent.putExtra("SEARCH_QUERY", searchQuery);
-        startActivity(intent);
+    private void performSearch() {
+        // Check if the search has already been initiated
+        if (!searchInitiated) {
+            // Get the search query from the EditText
+            String searchQuery = searchEditText.getText().toString();
+
+            // Start the searchResult activity and pass the search query as an extra
+            Intent intent = new Intent(this, searchResult.class);
+            intent.putExtra("SEARCH_QUERY", searchQuery);
+            startActivity(intent);
+
+            // Set the search initiated flag to true
+            searchInitiated = true;
+        }
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Reset the search initiated flag when the activity is paused
+        searchInitiated = false;
     }
 }
