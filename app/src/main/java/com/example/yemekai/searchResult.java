@@ -3,20 +3,18 @@ package com.example.yemekai;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class searchResult extends AppCompatActivity {
+public class searchResult extends AppCompatActivity implements RecipeAdapter.OnRecipeClickListener {
     private List<Recipe> recipeList;
     private EditText editText;
     private RecyclerView recyclerView;
@@ -31,25 +29,19 @@ public class searchResult extends AppCompatActivity {
         editText = otherLayout.findViewById(R.id.editTextText3);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //adapter = new RecipeAdapter();
         recyclerView.setAdapter(adapter);
 
         storage storage = new storage();
-      //  recipeList = new ArrayList<>();
         chatapi.OnApiResultListener listener = result -> {
-            // Handle the result, e.g., update UI with recommended recipes
             Log.d("ChatGPTApiTask", "API Result: " + result);
 
-            // Display the recipes in the TextView
             displayRecipes(result);
         };
-
-        // Pass the List<ItemL> and EditText content to the task
         new chatapi(storage.items, editText.getText().toString(), listener).execute();
 
     }
-    private List<String> parseApiResult(String jsonResult) {
-        List<String> recipeSuggestions = new ArrayList<>();
+    private List<Recipe> parseApiResult(String jsonResult) {
+        List<Recipe> recipeSuggestions = new ArrayList<>();
 
         try {
             JSONObject jsonObject = new JSONObject(jsonResult);
@@ -60,7 +52,25 @@ public class searchResult extends AppCompatActivity {
                 JSONObject message = choice.getJSONObject("message");
 
                 String recipeContent = message.getString("content");
-                recipeSuggestions.add(recipeContent);
+
+                // Split the content based on newline character
+                String[] sections = recipeContent.split("\n");
+
+                for (String section : sections) {
+                    if (section.matches("^\\d+\\..*")) {
+                        // Find the index of the first non-whitespace character
+                        int startIndex = 0;
+                        while (startIndex < section.length() && Character.isWhitespace(section.charAt(startIndex))) {
+                            startIndex++;
+                        }
+
+                        // Extract the recipe name
+                        String recipeName = section.substring(startIndex);
+
+                        Recipe recipe = new Recipe(recipeName, "");  // Modify this part based on your Recipe class
+                        recipeSuggestions.add(recipe);
+                    }
+                }
             }
         } catch (JSONException e) {
             Log.e("chatapi", "Error parsing JSON result: " + e.getMessage());
@@ -68,60 +78,45 @@ public class searchResult extends AppCompatActivity {
 
         return recipeSuggestions;
     }
-    private void displayRecipes(String jsonResult) {
-        List<String> recipeSuggestions = parseApiResult(jsonResult);
 
-        if (recipeSuggestions.isEmpty()) {
-            Log.e("DisplayRecipes", "Recipe suggestions list is empty");
+    private void displayRecipes(String jsonResult) {
+        recipeList = parseApiResult(jsonResult);
+
+        if (recipeList.isEmpty()) {
+            Log.e("DisplayRecipes", "Recipe list is empty");
             return;
         }
 
-        // Assuming recipeContainer is the parent layout in your search_result.xml
-        LinearLayout recipeContainer = findViewById(R.id.recipeContainer);
-        recipeContainer.removeAllViews(); // Clear existing views
-
-        for (String recipeContent : recipeSuggestions) {
-            // Extract the number at the start of the recipe to use as an identifier
-            String recipeNumberString = recipeContent.replaceAll("\\D+", "");
-
-            try {
-                // Create an inflated recipe item layout
-                View recipeItemView = getLayoutInflater().inflate(R.layout.recipe_item, null);
-
-                // Set a unique ID for the recipe item view using the recipe number
-                if (!recipeNumberString.isEmpty()) {
-                    long recipeNumber = Long.parseLong(recipeNumberString);
-                    recipeItemView.setId((int) recipeNumber);
-                } else {
-                    // Handle the case where the recipe number couldn't be extracted or is empty
-                    Log.e("RecipeParsing", "Error parsing recipe number for: " + recipeContent);
-                    continue; // Skip this iteration if parsing fails
-                }
-
-                // Find the TextView within the inflated layout
-                TextView recipeTextView = recipeItemView.findViewById(R.id.recipeTextView);
-                recipeTextView.setText(recipeContent);
-
-                // Set an onClickListener for each recipe TextView
-                recipeTextView.setOnClickListener(view -> {
-                    // Retrieve the unique ID assigned to the clicked recipe item
-                    int clickedRecipeId = view.getId();
-
-                    // Implement your specific actions for the clicked recipe
-                    // For now, let's log the selected recipe content and ID
-                    Log.d("RecipeClick", "Selected Recipe: " + recipeContent + ", ID: " + clickedRecipeId);
-                });
-
-                // Add the inflated layout to the recipeContainer
-                recipeContainer.addView(recipeItemView);
-
-            } catch (NumberFormatException e) {
-                // Handle the case where the recipe number is not a valid long
-                Log.e("RecipeParsing", "NumberFormatException: " + e.getMessage());
-            }
+        // Update the existing adapter with new data
+        if (adapter == null) {
+            adapter = new RecipeAdapter(recipeList, this);
+            recyclerView.setAdapter(adapter);
+        } else {
+            adapter.updateData(recipeList);
         }
+
+        // Use RecyclerView and RecipeAdapter
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void onRecipeClick(int position, String recipeName) {
+        Recipe selectedRecipe = recipeList.get(position);
+        Log.d("RecipeClick", "Selected Recipe: " + selectedRecipe.getRecipeName() + ", ID: " + position);
+
+
+        chatapiDetails.OnApiResultListener detailsListener = detailsResult -> {
+
+            Log.d("RecipeDetailsApiTask", "API Result: " + detailsResult);
+
+
+        };
+
+        new chatapiDetails(selectedRecipe.getRecipeName(), detailsListener).execute();
+        Intent intent = new Intent(searchResult.this, RecipeDetails.class);
+        startActivity(intent);
+    }
 }
+
 
 

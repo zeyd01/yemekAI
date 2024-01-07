@@ -93,7 +93,7 @@ public class storage extends AppCompatActivity {
         for (ItemL item : items) {
             listStringBuilder.append(item.toString()).append("\n\n");
         }
-       // tw1.setText(listStringBuilder.toString());
+
 
         updateList();
     }

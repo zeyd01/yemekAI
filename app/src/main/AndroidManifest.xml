@@ -38,6 +38,12 @@
             android:exported="false"
             android:label="Favorite Food"
             android:theme="@style/Theme.YemekAI" />
+        <activity
+        android:name=".RecipeDetails"
+        android:exported="false"
+        android:label="Recipe Result"
+        android:theme="@style/Theme.YemekAI" />
+
 
         <activity
             android:name=".MainActivity"

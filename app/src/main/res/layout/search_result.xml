@@ -9,13 +9,6 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-    <LinearLayout
-        android:id="@+id/recipeContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="16dp">
-        <!-- This LinearLayout will hold dynamically created TextViews -->
-    </LinearLayout>
+
 
 </RelativeLayout>

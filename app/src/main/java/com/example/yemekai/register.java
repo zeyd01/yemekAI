@@ -1,9 +1,6 @@
 package com.example.yemekai;
 
-import static android.text.TextUtils.isEmpty;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,10 +13,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -81,7 +76,7 @@ public boolean checkDataEntered(){
         name1.setError("Name is required");
         return false;
     }
-    if (isEmail(email1)==false) {
+    if (!isEmail(email1)) {
         email1.setError("Enter a valid E-Mail");
         return false;
     }
