@@ -36,7 +36,7 @@ public class searchResult extends AppCompatActivity implements RecipeAdapter.OnR
             Log.d("ChatGPTApiTask", "API Result: " + result);
 
             displayRecipes(result);
-        };
+        }; //buraya bak 2 kere çalışma sebebi olabilir
         new chatapi(storage.items, editText.getText().toString(), listener).execute();
 
     }
@@ -67,7 +67,7 @@ public class searchResult extends AppCompatActivity implements RecipeAdapter.OnR
                         // Extract the recipe name
                         String recipeName = section.substring(startIndex);
 
-                        Recipe recipe = new Recipe(recipeName, "");  // Modify this part based on your Recipe class
+                        Recipe recipe = new Recipe(recipeName, "");
                         recipeSuggestions.add(recipe);
                     }
                 }

@@ -30,9 +30,8 @@ public class login extends AppCompatActivity {
         e1=findViewById(R.id.editTextTextEmailAddress3);
         e2=findViewById(R.id.editTextTextPassword3);
         b1=findViewById(R.id.button8);
-        accounts = new ArrayList<>();
-        accounts.add(new Account("admin","admin@gmail.com","admin"));
         accounts = getStoredAccounts();
+        accounts.add(new Account("admin","admin@gmail.com","admin"));
         Log.d("LoginActivity", "Accounts retrieved: " + Arrays.toString(accounts.toArray()));
 
         b1.setOnClickListener(v -> {
